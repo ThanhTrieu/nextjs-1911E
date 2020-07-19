@@ -1,8 +1,23 @@
 import { combineReducers } from 'redux';
-import { numberReducer as number } from './numberReducer';
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import numberReducer from './numberReducer';
+import { weatherReducer } from './weatherReducer';
+
+const configRootPersist = {
+  key: 'rootApp',
+  storage: storage,
+  whitelist: ['number']
+}
+const configPersistWeather = {
+  key: 'ListDataWeather',
+  storage: storage,
+  whitelist: ['weather']
+}
 
 const rootReducer = combineReducers({
-  number
+  number: numberReducer,
+  weather: persistReducer(configPersistWeather,weatherReducer)
 });
-
-export default rootReducer;
+const rootPersistReducer = persistReducer(configRootPersist, rootReducer)
+export default rootPersistReducer;

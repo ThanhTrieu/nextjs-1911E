@@ -1,40 +1,23 @@
-import { useMemo } from 'react';
 import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension'
+import createSagaMiddleware from 'redux-saga';
+import { createWrapper } from 'next-redux-wrapper';
 
-import { initialState } from './reducers/numberReducer';
 import rootReducer from './reducers/index';
+import rootSaga from './saga/index';
 
-let store;
-
-const initStore = (preloadedState = initialState) => {
-  return createStore(
-    rootReducer,
-    preloadedState,
-    composeWithDevTools(applyMiddleware())
-  )
-}
-
-export const initializeStore  = (preloadedState) => {
-  let _store = store ?? initStore(preloadedState);
-  if (preloadedState && store) {
-    _store = initStore({
-      ...store.getState(),
-      ...preloadedState,
-    })
-    // Reset the current store
-    store = undefined
+const bindMiddleware = (middleware) => {
+  if (process.env.NODE_ENV !== 'production') {
+    const { composeWithDevTools } = require('redux-devtools-extension')
+    return composeWithDevTools(applyMiddleware(...middleware))
   }
-
-  // For SSG and SSR always create a new store
-  if (typeof window === 'undefined') return _store
-  // Create the store once in the client
-  if (!store) store = _store
-
-  return _store
+  return applyMiddleware(...middleware)
 }
 
-export function useStore(initialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState])
-  return store
+export const makeStore = (context = {}) => {
+  const sagaMiddleware = createSagaMiddleware();
+  const store = createStore(rootReducer, bindMiddleware([sagaMiddleware]));
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+  return store;
 }
+
+export const wrapper = createWrapper(makeStore, { debug: true })
