@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Spin } from 'antd';
-import { makeStore, makeStore } from '../redux/configStore';
+import { makeStore } from '../redux/configStore';
 
 export default function MyApp({ Component, pageProps }) {
   const store = makeStore(pageProps.initialReduxState);
