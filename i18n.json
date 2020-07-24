@@ -1,0 +1,11 @@
+{
+  "allLanguages": ["en", "vi"],
+  "defaultLanguage": "vi",
+  "currentPagesDir": "_pages",
+  "finalPagesDir": "pages",
+  "localesPath": "locales",
+  "pages": {
+    "*": ["common"],
+    "/": ["home"]
+  }
+}

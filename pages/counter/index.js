@@ -1,7 +1,31 @@
-import { Counter } from '../../components/counter/index';
+// @ts-nocheck
+import I18nProvider from 'next-translate/I18nProvider'
+import React from 'react'
+import C from '../../_pages/counter'
+import ns0 from '../../locales/vi/common.json'
 
-export default function Index(){
+const namespaces = { 'common': ns0 }
+
+export default function Page(p){
   return (
-    <Counter/>
+    <I18nProvider 
+      lang="vi" 
+      namespaces={namespaces}  
+      internals={{"defaultLanguage":"vi","isStaticMode":true}}
+    >
+      <C {...p} />
+    </I18nProvider>
   )
 }
+
+Page = Object.assign(Page, { ...C })
+
+if(C && C.getInitialProps) {
+  Page.getInitialProps = ctx => C.getInitialProps({ ...ctx, lang: 'vi'})
+}
+
+
+
+
+
+export * from '../../_pages/counter'

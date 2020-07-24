@@ -1,22 +1,31 @@
-import { useRouter } from 'next/router'
-import Link from 'next/link';
-import MasterLayout from '../../../../components/master-layout';
+// @ts-nocheck
+import I18nProvider from 'next-translate/I18nProvider'
+import React from 'react'
+import C from '../../../../_pages/post/[name]/[id]'
+import ns0 from '../../../../locales/vi/common.json'
 
-const Post = () => {
-  const router = useRouter()
-  const { id, name, age } = router.query;
-  //const age = router.query.age;
-  // /post/[id]
-  return(
-    <>
-      <MasterLayout
-        title={`bai viet so - ${id}`}
-      >
-        <h1>Bai viet co id la {id}</h1>
-        <h2> Ten bai biet {name}</h2>
-        <p> Age : {age} </p>
-      </MasterLayout>
-    </>
+const namespaces = { 'common': ns0 }
+
+export default function Page(p){
+  return (
+    <I18nProvider 
+      lang="vi" 
+      namespaces={namespaces}  
+      internals={{"defaultLanguage":"vi","isStaticMode":true}}
+    >
+      <C {...p} />
+    </I18nProvider>
   )
 }
-export default Post;
+
+Page = Object.assign(Page, { ...C })
+
+if(C && C.getInitialProps) {
+  Page.getInitialProps = ctx => C.getInitialProps({ ...ctx, lang: 'vi'})
+}
+
+
+
+
+
+export * from '../../../../_pages/post/[name]/[id]'

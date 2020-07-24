@@ -1,16 +1,31 @@
-import MasterLayout from '../../components/master-layout';
-import { useRouter } from 'next/router'
+// @ts-nocheck
+import I18nProvider from 'next-translate/I18nProvider'
+import React from 'react'
+import C from '../../_pages/home/product'
+import ns0 from '../../locales/vi/common.json'
 
-const Home = () => {
-  const router = useRouter();
-  const id = router.query.id;
+const namespaces = { 'common': ns0 }
+
+export default function Page(p){
   return (
-    <>
-      <MasterLayout title="This is home page">
-        <h1>This is home page - id = {id}</h1>
-      </MasterLayout>
-      
-    </>
+    <I18nProvider 
+      lang="vi" 
+      namespaces={namespaces}  
+      internals={{"defaultLanguage":"vi","isStaticMode":true}}
+    >
+      <C {...p} />
+    </I18nProvider>
   )
 }
-export default Home;
+
+Page = Object.assign(Page, { ...C })
+
+if(C && C.getInitialProps) {
+  Page.getInitialProps = ctx => C.getInitialProps({ ...ctx, lang: 'vi'})
+}
+
+
+
+
+
+export * from '../../_pages/home/product'

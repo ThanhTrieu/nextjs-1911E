@@ -10,9 +10,9 @@ const configRootPersist = {
   whitelist: ['number']
 }
 const configPersistWeather = {
-  key: 'ListDataWeather',
+  key: 'ListDataWeathers',
   storage: storage,
-  whitelist: ['weather']
+  whitelist: ['dataWeather']
 }
 
 const rootReducer = combineReducers({
